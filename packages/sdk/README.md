@@ -3,7 +3,7 @@
 
 A plug-and-play SDK for vendors to accept crypto payments (USDT, cUSD, ETH, etc.) via QR codes, POS terminals, or payment links—with stablecoin settlement on the Morpho network.
 
-**Live Demo:** [Try it out](https://morph-payments-sdk-demo.vercel.app/)
+**Live Demo:** [Try it out](https://morph-payment-sdk-demo.vercel.app/)
 
 ## Vision
 
