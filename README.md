@@ -3,7 +3,7 @@
 
 A plug-and-play SDK for vendors to accept crypto payments (USDT, cUSD, ETH, etc.) via QR codes, POS terminals, or payment links—with stablecoin settlement on the Morpho network.
 
-**Live Demo:** [Try it out](https://morph-payment-sdk-demo.vercel.app/)
+**Live Demo:** [Try it out](https://morph-payments-sdk-demo.vercel.app/)
 
 ## Vision
 
@@ -41,13 +41,13 @@ The Morpho Crypto Payment Gateway SDK is a comprehensive solution that transform
 ### 1. Install the SDK
 
 ```bash
-npm install morph-payment-sdk
+npm install morph-payments-sdk
 ```
 
 ### 2. Basic Integration
 
 ```jsx
-import { CryptomorphPay } from 'morph-payment-sdk';
+import { CryptomorphPay } from 'morph-payments-sdk';
 
 function App() {
   return (
@@ -142,7 +142,7 @@ Handles incoming payment links:
 
 ```bash
 git clone <repository-url>
-cd morph-payment-sdk
+cd morph-payments-sdk
 
 # Install dependencies
 npm run install:all

@@ -1,5 +1,5 @@
 {
-  "name": "morph-payment-sdk",
+  "name": "morph-payments-sdk",
   "version": "0.0.1",
   "description": "A plug-and-play SDK for vendors to accept crypto payments via QR codes, POS, or pay links with stablecoin settlement",
   "author": "Mulx10",

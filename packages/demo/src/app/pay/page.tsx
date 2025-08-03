@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { PaymentLinkHandler } from 'morph-payment-sdk';
+import { PaymentLinkHandler } from 'morph-payments-sdk';
 import { Box, Container } from '@mui/material';
 
 export default function PayPage() {

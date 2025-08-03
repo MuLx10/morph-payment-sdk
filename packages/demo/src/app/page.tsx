@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CryptomorphPay, SupportedCurrency, SupportedCurrencyList } from 'morph-payment-sdk';
-import { createVendorSDK, validateMerchantAddress } from 'morph-payment-sdk';
+import { CryptomorphPay, SupportedCurrency, SupportedCurrencyList } from 'morph-payments-sdk';
+import { createVendorSDK, validateMerchantAddress } from 'morph-payments-sdk';
 import { 
   Button, 
   TextField, 
@@ -196,7 +196,7 @@ export default function DemoPage() {
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>1. Install the SDK</Typography>
               <Paper sx={{ p: 1, mt: 1, bgcolor: 'grey.100' }}>
                 <Typography variant="body2" component="code">
-                  npm install morph-payment-sdk
+                  npm install morph-payments-sdk
                 </Typography>
               </Paper>
             </Box>
@@ -204,7 +204,7 @@ export default function DemoPage() {
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>2. Import and Configure</Typography>
               <Paper sx={{ p: 1, mt: 1, bgcolor: 'grey.100' }}>
                 <Typography variant="body2" component="code">
-                  {`import { CryptomorphPay } from 'morph-payment-sdk';
+                  {`import { CryptomorphPay } from 'morph-payments-sdk';
 
 
 const sdk = createVendorSDK({
