@@ -41,13 +41,13 @@ The Morpho Crypto Payment Gateway SDK is a comprehensive solution that transform
 ### 1. Install the SDK
 
 ```bash
-npm install morph-stablecoin-sdk
+npm install morph-payment-sdk
 ```
 
 ### 2. Basic Integration
 
 ```jsx
-import { CryptomorphPay } from 'morph-stablecoin-sdk';
+import { CryptomorphPay } from 'morph-payment-sdk';
 
 function App() {
   return (
@@ -142,7 +142,7 @@ Handles incoming payment links:
 
 ```bash
 git clone <repository-url>
-cd morph-stablecoin-sdk
+cd morph-payment-sdk
 
 # Install dependencies
 npm run install:all
