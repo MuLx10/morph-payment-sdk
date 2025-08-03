@@ -1,0 +1,61 @@
+{
+  "name": "morph-stablecoin-sdk",
+  "version": "0.0.1",
+  "description": "A plug-and-play SDK for vendors to accept crypto payments via QR codes, POS, or pay links with stablecoin settlement",
+  "author": "Mulx10",
+  "license": "MIT",
+  "keywords": [
+    "morph",
+    "crypto",
+    "react",
+    "sdk",
+    "payment-gateway",
+    "qr-code",
+    "pos",
+    "stablecoin",
+    "usdt",
+    "usdc",
+    "vendor"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "viem": "^2.0.0",
+    "wagmi": "^2.0.0",
+    "@mui/material": "^5.15.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0"
+  },
+  "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.2.7",
+    "@tanstack/react-query": "^5.80.7",
+    "axios": "^1.8.1",
+    "clsx": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.0",
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "typescript": "^5.0.0",
+    "viem": "^2.0.0",
+    "wagmi": "^2.0.0",
+    "@mui/material": "^5.15.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0"
+  }
+}

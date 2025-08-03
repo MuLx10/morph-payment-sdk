@@ -1,0 +1,20 @@
+{
+  "name": "morph-stablecoin-monorepo",
+  "version": "0.0.1",
+  "description": "Morpho Crypto Payment Gateway SDK and Demo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build:sdk": "cd packages/sdk && npm run build",
+    "dev:sdk": "cd packages/sdk && npm run dev",
+    "dev:demo": "cd packages/demo && npm run dev",
+    "build:demo": "cd packages/demo && npm run build",
+    "install:all": "npm install && cd packages/sdk && npm install && cd ../demo && npm install",
+    "build:all": "npm run build:sdk && npm run build:demo"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
