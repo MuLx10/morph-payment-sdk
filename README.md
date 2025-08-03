@@ -3,26 +3,29 @@
 
 A plug-and-play SDK for vendors to accept crypto payments (USDT, cUSD, ETH, etc.) via QR codes, POS terminals, or payment links—with stablecoin settlement on the Morpho network.
 
-Try out at [app](https://morph-payment-sdk-demo.vercel.app/)
-## Table of Contents
+**Live Demo:** [Try it out](https://morph-payment-sdk-demo.vercel.app/)
 
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Quick Start](#quick-start)
-- [Demo](#demo)
-- [SDK Components](#sdk-components)
-- [SDK Methods](#sdk-methods)
-- [Configuration](#configuration)
-- [Supported Currencies](#supported-currencies)
-- [Payment Methods](#payment-methods)
-- [Network Support](#network-support)
-- [Examples](#examples)
-- [Development](#development)
-- [Contributing](#contributing)
-- [License](#license)
-- [Support](#support)
+## Vision
 
-## Features
+To democratize crypto payments by providing merchants with a seamless, secure, and user-friendly way to accept cryptocurrency payments. We envision a future where crypto payments are as simple and ubiquitous as traditional payment methods.
+
+## What We're Trying to Achieve
+
+- **Simplify Crypto Adoption:** Remove the technical barriers for merchants to accept cryptocurrency payments
+- **Bridge Traditional & Crypto Commerce:** Enable seamless integration between existing business models and crypto payment infrastructure
+- **Stablecoin-First Approach:** Focus on stablecoins to minimize volatility concerns for both merchants and customers
+- **Universal Compatibility:** Support multiple wallets and networks to ensure broad accessibility
+
+## Description
+
+The Morpho Crypto Payment Gateway SDK is a comprehensive solution that transforms any business into a crypto-ready merchant. Built on the Morpho network, it provides:
+
+- **Instant Settlement:** Real-time payment processing with immediate confirmation
+- **Multi-Currency Support:** Accept ETH, USDT, USDC, cUSD, and DAI payments
+- **Flexible Integration:** Works as embedded components or standalone applications
+- **User-Friendly Interface:** Clean, accessible UI that works across all devices
+
+## Key Features
 
 - Generate **QR codes** for instant crypto payments
 - POS terminal interface for in-store payments
@@ -33,6 +36,32 @@ Try out at [app](https://morph-payment-sdk-demo.vercel.app/)
 - **Customizable UI:** light/dark themes, embedded/standalone
 - Modern, accessible Material UI components
 
+## Quick Start
+
+### 1. Install the SDK
+
+```bash
+npm install morph-stablecoin-sdk
+```
+
+### 2. Basic Integration
+
+```jsx
+import { CryptomorphPay } from 'morph-stablecoin-sdk';
+
+function App() {
+  return (
+    <CryptomorphPay
+      address="0x7312Ee30515CAe8B03EF1dF6B75e0D2dBb71B0E4"
+      amount={0.1}
+      currency="ETH"
+      onSuccess={tx => console.log('Payment success:', tx)}
+      onError={err => console.error('Payment error:', err)}
+    />
+  );
+}
+```
+
 ## Project Structure
 
 This is a monorepo containing multiple packages:
@@ -40,75 +69,13 @@ This is a monorepo containing multiple packages:
 - **`packages/sdk`** — Core SDK package with payment gateway logic
 - **`packages/demo`** — Demo application showcasing SDK features
 
-## Quick Start
-
-### 1. Install the SDK
-
-```
-
-npm install morph-stablecoin-sdk
-
-```
-
-### 2. Basic Integration Using `CryptomorphPay`
-
-```
-
-import { CryptomorphPay } from 'morph-stablecoin-sdk';
-
-function App() {
-return (
-<CryptomorphPay
-  address="0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6"
-  amount={0.1}
-  currency="ETH"
-  onSuccess={tx => console.log('Payment success:', tx)}
-  onError={err => console.error('Payment error:', err)}
-/>
-);
-}
-
-```
-
-### 3. SDK Integration with Vendor SDK
-
-```
-
-import { createVendorSDK } from 'morph-stablecoin-sdk';
-
-const sdk = createVendorSDK({
-  merchantAddress: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
-  supportedCurrencies: ['USDT', 'USDC', 'ETH'],
-  network: 'morph-holesky',
-  theme: 'light',
-});
-
-// Create a payment request
-const payment = sdk.createPayment({
-  amount: '100.00',
-  currency: 'USDT',
-  description: 'Coffee purchase',
-});
-
-// Generate QR code data
-const qrData = sdk.generateQRData(payment);
-
-// Generate payment link
-const paymentLink = sdk.generatePaymentLink(payment);
-
-```
-
 ## Demo
 
-The demo app demonstrates all SDK features.
+Run the demo locally:
 
-### To run the demo:
-
-```
-
+```bash
 cd packages/demo
 npm run dev
-
 ```
 
 Open your browser at `http://localhost:3000`
@@ -119,114 +86,28 @@ Open your browser at `http://localhost:3000`
 
 The main component for accepting payments:
 
-```
-
+```jsx
 <CryptomorphPay
-address="0x..."            // Merchant wallet address
-amount={0.1}               // Payment amount
-currency="ETH"             // Currency type (ETH, USDT, USDC, USD, etc.)
-onSuccess={tx => {}}       // Success callback
-onError={err => {}}        // Error callback
-theme="light"              // Optional: 'light' or 'dark'
-tokenAddress="0x..."       // Optional: override token contract address
-posEnabled={false}         // Optional: Enable POS mode
+  address="0x..."            // Merchant wallet address
+  amount={0.1}               // Payment amount
+  currency="ETH"             // Currency type
+  onSuccess={tx => {}}       // Success callback
+  onError={err => {}}        // Error callback
+  theme="light"              // Optional: 'light' or 'dark'
+  posEnabled={false}         // Optional: Enable POS mode
 />
-
 ```
-
-**Features:**
-- Wallet payment via connected wallet
-- QR code for mobile wallet payments
-- Payment link generation
-- Multi-currency and stablecoin support
-- Material UI: clean, responsive interface
 
 ### `PaymentLinkHandler`
 
 Handles incoming payment links:
 
-```
-
+```jsx
 <PaymentLinkHandler
   onPaymentSuccess={(txHash) => console.log(txHash)}
   onPaymentError={(error) => console.error(error)}
   theme="light"
 />
-
-```
-
-### `QRCodeGenerator`
-
-Generates QR codes for the given payment data:
-
-```
-
-<QRCodeGenerator
-  data={paymentData}
-  size={256}
-  className="custom-class"
-/>
-
-```
-
-## SDK Methods
-
-### `createVendorSDK(config)`
-
-Creates an SDK instance.
-
-```
-
-const sdk = createVendorSDK({
-  merchantAddress: '0x...',
-  supportedCurrencies: ['USDT', 'USDC', 'ETH'],
-  network: 'morph-holesky',
-  theme: 'light',
-  mode: 'standalone',
-});
-
-```
-
-### Available Methods:
-
-- `createPayment(options)`
-- `generateQRData(payment)`
-- `generatePaymentLink(payment, baseUrl)`
-- `getPaymentRequests()`
-- `getPaymentRequest(id)`
-- `updatePaymentStatus(id, status, txHash)`
-- `getPaymentStats()`
-- `validatePaymentRequest(payment)`
-- `exportPaymentData(format)`
-
-## Configuration
-
-### VendorSDKConfig
-
-```
-
-interface VendorSDKConfig {
-  merchantAddress: string;
-  supportedCurrencies?: Array<'ETH' | 'USDT' | 'USDC' | 'cUSD' | 'DAI'>;
-  network?: 'morph-holesky' | 'morph-mainnet';
-  theme?: 'light' | 'dark';
-  mode?: 'standalone' | 'embedded';
-}
-
-```
-
-### CreatePaymentOptions
-
-```
-
-interface CreatePaymentOptions {
-amount: string;
-currency: string;
-description?: string;
-expiresIn?: number; // hours
-metadata?: Record<string, any>;
-}
-
 ```
 
 ## Supported Currencies
@@ -250,43 +131,6 @@ metadata?: Record<string, any>;
 - Supports Morpho Holesky Testnet
 - Mainnet support planned for future updates
 
-## Examples
-
-### Multiple Payment Options
-
-```
-
-import { CryptomorphPay } from 'morph-stablecoin-sdk';
-
-function PaymentPage() {
-return (
-<div>
-      <CryptomorphPay
-        address="0x742..."
-        amount={0.1}
-        currency="ETH"
-        onSuccess={tx => console.log('ETH payment:', tx)}
-      />
-
-      <CryptomorphPay
-        address="0x742..."
-        amount={50}
-        currency="USD"
-        onSuccess={tx => console.log('USD payment:', tx)}
-      />
-    
-      <CryptomorphPay
-        address="0x742..."
-        amount={100}
-        currency="USDT"
-        onSuccess={tx => console.log('USDT payment:', tx)}
-      />
-    </div>
-    );
-}
-
-```
-
 ## Development
 
 ### Prerequisites
@@ -296,23 +140,18 @@ return (
 
 ### Setup
 
-```
-
+```bash
 git clone <repository-url>
 cd morph-stablecoin-sdk
 
 # Install dependencies
-
 npm run install:all
 
 # Build SDK
-
 npm run build:sdk
 
 # Start Demo
-
 npm run dev:demo
-
 ```
 
 ### Available Scripts
@@ -342,4 +181,3 @@ MIT License — see the [LICENSE](LICENSE) file for details.
 
 For support or questions, please open an issue on the GitHub repository.
 ```
-

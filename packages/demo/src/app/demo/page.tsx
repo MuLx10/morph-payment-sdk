@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CryptomorphPay, SupportedCurrency, SupportedCurrencyList } from 'morph-stablecoin-sdk';
+import { VendorPaymentGateway } from 'morph-stablecoin-sdk';
 import { createVendorSDK, validateMerchantAddress } from 'morph-stablecoin-sdk';
 import { 
   Button, 
@@ -11,20 +11,12 @@ import {
   Box, 
   Grid,
   Alert,
-  Chip,
-  Select,
-  Input,
-  FormControl,
-  InputLabel,
-  MenuItem
+  Chip
 } from '@mui/material';
 
 export default function DemoPage() {
-  const [merchantAddress, setMerchantAddress] = useState('0x7312Ee30515CAe8B03EF1dF6B75e0D2dBb71B0E4');
-  const [showGateway, setShowGateway] = useState(true);
-  const [amount, setAmount] = useState("0.01");
-  const [currency, setCurrency] = useState<SupportedCurrency>("USDT");
-  const [description, setDescription] = useState("");
+  const [merchantAddress, setMerchantAddress] = useState('0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6');
+  const [showGateway, setShowGateway] = useState(false);
 
   const handlePaymentSuccess = (payment: any) => {
     console.log('Payment successful:', payment);
@@ -75,46 +67,32 @@ export default function DemoPage() {
                 helperText={merchantAddress && !isValidAddress ? "Please enter a valid Ethereum address" : ""}
               />
             </Box>
-            <Box sx={{ display: 'flex', gap: 2 }}>
-            <TextField
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="0.00"
-          fullWidth
-          size="medium"
-          sx={{ fontSize: '1.25rem', fontWeight: 'bold' }}
-        />
-        <FormControl fullWidth>
-          <InputLabel>Currency</InputLabel>
-          <Select
-            value={currency}
-            onChange={(e) => setCurrency(e.target.value as SupportedCurrency)}
-            label="Currency"
-          >
-            {SupportedCurrencyList.map(c => (
-              <MenuItem key={c} value={c}>{c}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
+            
+            <Button
+              onClick={() => setShowGateway(true)}
+              disabled={!isValidAddress}
+              variant="contained"
+              color="success"
+              size="large"
+              fullWidth
+            >
+              Launch Payment Gateway
+            </Button>
           </Box>
         </Paper>
 
-        {isValidAddress && (
-          <Paper elevation={3} sx={{ p: 3 }}>
-            <Typography variant="h4" component="h2" sx={{ mb: 3, fontWeight: 'bold', textAlign: 'center' }}>
-              CryptoMorphPay Component Demo
-            </Typography>
-            
-            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-              <CryptomorphPay
-                address={merchantAddress}
-                amount={amount}
-                currency={currency}
-                onSuccess={tx => console.log('Payment success:', tx)}
-                onError={err => console.error('Payment error:', err)}
-              />
-            </Box>
+        {showGateway && isValidAddress && (
+          <Paper elevation={3}>
+            <VendorPaymentGateway
+              merchantAddress={merchantAddress}
+              supportedCurrencies={["USDT", "USDC", "ETH", "cUSD", "DAI"]}
+              onPaymentSuccess={handlePaymentSuccess}
+              onPaymentError={handlePaymentError}
+              theme="light"
+              showQRCode={true}
+              showPOS={true}
+              showPayLink={true}
+            />
           </Paper>
         )}
 
@@ -166,11 +144,11 @@ export default function DemoPage() {
                 Supported Currencies
               </Typography>
               <Box component="ul" sx={{ color: 'text.secondary', pl: 2 }}>
-                <Typography component="li">ETH (Native)</Typography>
-                <Typography component="li">USDT (Stablecoin)</Typography>
-                <Typography component="li">USDC (Stablecoin)</Typography>
-                <Typography component="li">cUSD (Celo Dollar)</Typography>
-                <Typography component="li">DAI (Decentralized)</Typography>
+                <Typography component="li">• ETH (Native)</Typography>
+                <Typography component="li">• USDT (Stablecoin)</Typography>
+                <Typography component="li">• USDC (Stablecoin)</Typography>
+                <Typography component="li">• cUSD (Celo Dollar)</Typography>
+                <Typography component="li">• DAI (Decentralized)</Typography>
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -178,10 +156,10 @@ export default function DemoPage() {
                 Payment Methods
               </Typography>
               <Box component="ul" sx={{ color: 'text.secondary', pl: 2 }}>
-                <Typography component="li">QR Code Scanning</Typography>
-                <Typography component="li">POS Terminal Interface</Typography>
-                <Typography component="li">Shareable Payment Links</Typography>
-                <Typography component="li">Direct Wallet Integration</Typography>
+                <Typography component="li">• QR Code Scanning</Typography>
+                <Typography component="li">• POS Terminal Interface</Typography>
+                <Typography component="li">• Shareable Payment Links</Typography>
+                <Typography component="li">• Direct Wallet Integration</Typography>
               </Box>
             </Grid>
           </Grid>
@@ -204,8 +182,7 @@ export default function DemoPage() {
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>2. Import and Configure</Typography>
               <Paper sx={{ p: 1, mt: 1, bgcolor: 'grey.100' }}>
                 <Typography variant="body2" component="code">
-                  {`import { CryptomorphPay } from 'morph-stablecoin-sdk';
-
+                  {`import { VendorPaymentGateway, createVendorSDK } from 'morph-stablecoin-sdk';
 
 const sdk = createVendorSDK({
   merchantAddress: '0x...',
@@ -218,13 +195,11 @@ const sdk = createVendorSDK({
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>3. Use the Component</Typography>
               <Paper sx={{ p: 1, mt: 1, bgcolor: 'grey.100' }}>
                 <Typography variant="body2" component="code">
-                  {`<CryptomorphPay
-      address="0x7312Ee30515CAe8B03EF1dF6B75e0D2dBb71B0E4"
-      amount={0.1}
-      currency="ETH"
-      onSuccess={tx => console.log('Payment success:', tx)}
-      onError={err => console.error('Payment error:', err)}
-    />`}
+                  {`<VendorPaymentGateway
+  merchantAddress="0x..."
+  onPaymentSuccess={handleSuccess}
+  onPaymentError={handleError}
+/>`}
                 </Typography>
               </Paper>
             </Box>
