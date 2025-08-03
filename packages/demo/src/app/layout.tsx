@@ -14,7 +14,7 @@ const geistMono = Inter({
 
 export const metadata: Metadata = {
   title: "Morph pay Demo",
-  description: "Crypto Payment Gateway Demo",
+  description: "Morph Payment Demo",
   icons: {
     icon: "/morph.svg",
   },

@@ -461,7 +461,7 @@ const CryptomorphPayComponent: React.FC<CryptomorphPayProps> = ({
   );
 };
 
-export const CryptomorphPay: React.FC<CryptomorphPayProps> = (props) => {
+export const MorphPayment: React.FC<CryptomorphPayProps> = (props) => {
   return (
     <WalletWrapper>
       <CryptomorphPayComponent {...props} />

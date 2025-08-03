@@ -1,4 +1,4 @@
-import { CryptomorphPay } from './CryptoMorphPay';
+import { MorphPayment } from './MorphPayment';
 
 // Export UI components (Material UI based)
 export { Card, CardHeader, CardTitle, CardContent } from './components/card';
@@ -8,7 +8,7 @@ export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 export { Button } from './components/button';
 
 // Export payment components
-export { CryptomorphPay } from "./CryptoMorphPay";
+export { MorphPayment } from "./MorphPayment";
 // export { VendorPaymentGateway } from "./components/VendorPaymentGateway";
 export { PaymentLinkHandler } from "./PaymentLinkHandler";
 // export { SimpleIntegration } from "./components/SimpleIntegration";

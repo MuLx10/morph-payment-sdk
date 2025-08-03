@@ -47,11 +47,11 @@ npm install morph-payments-sdk
 ### 2. Basic Integration
 
 ```jsx
-import { CryptomorphPay } from 'morph-payments-sdk';
+import { MorphPayment } from 'morph-payments-sdk';
 
 function App() {
   return (
-    <CryptomorphPay
+    <MorphPayment
       address="0x7312Ee30515CAe8B03EF1dF6B75e0D2dBb71B0E4"
       amount={0.1}
       currency="ETH"
@@ -82,12 +82,12 @@ Open your browser at `http://localhost:3000`
 
 ## SDK Components
 
-### `CryptomorphPay`
+### `MorphPayment`
 
 The main component for accepting payments:
 
 ```jsx
-<CryptomorphPay
+<MorphPayment
   address="0x..."            // Merchant wallet address
   amount={0.1}               // Payment amount
   currency="ETH"             // Currency type

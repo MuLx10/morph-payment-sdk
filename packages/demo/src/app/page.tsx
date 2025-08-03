@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CryptomorphPay, SupportedCurrency, SupportedCurrencyList } from 'morph-payments-sdk';
+import { MorphPayment, SupportedCurrency, SupportedCurrencyList } from 'morph-payments-sdk';
 import { createVendorSDK, validateMerchantAddress } from 'morph-payments-sdk';
 import { 
   Button, 
@@ -49,7 +49,7 @@ export default function DemoPage() {
       <Box sx={{ maxWidth: '1200px', mx: 'auto', px: 2 }}>
         <Box sx={{ textAlign: 'center', mb: 4 }}>
           <Typography variant="h2" component="h1" sx={{ mb: 2, fontWeight: 'bold' }}>
-            Crypto Payment Gateway Demo
+            Morph Payment Demo
           </Typography>
           <Typography variant="h5" color="text.secondary">
             A plug-and-play SDK for vendors to accept crypto payments
@@ -103,11 +103,11 @@ export default function DemoPage() {
         {isValidAddress && (
           <Paper elevation={3} sx={{ p: 3 }}>
             <Typography variant="h4" component="h2" sx={{ mb: 3, fontWeight: 'bold', textAlign: 'center' }}>
-              CryptoMorphPay Component Demo
+              MorphPayment Component Demo
             </Typography>
             
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-              <CryptomorphPay
+              <MorphPayment
                 address={merchantAddress}
                 amount={amount}
                 currency={currency}
@@ -204,7 +204,7 @@ export default function DemoPage() {
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>2. Import and Configure</Typography>
               <Paper sx={{ p: 1, mt: 1, bgcolor: 'grey.100' }}>
                 <Typography variant="body2" component="code">
-                  {`import { CryptomorphPay } from 'morph-payments-sdk';
+                  {`import { MorphPayment } from 'morph-payments-sdk';
 
 
 const sdk = createVendorSDK({
@@ -218,7 +218,7 @@ const sdk = createVendorSDK({
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>3. Use the Component</Typography>
               <Paper sx={{ p: 1, mt: 1, bgcolor: 'grey.100' }}>
                 <Typography variant="body2" component="code">
-                  {`<CryptomorphPay
+                  {`<MorphPayment
       address="0x7312Ee30515CAe8B03EF1dF6B75e0D2dBb71B0E4"
       amount={0.1}
       currency="ETH"
