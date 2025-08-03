@@ -43,3 +43,4 @@ export const ERC20_ABI: Abi = [
   
   export type PaymentMethod = "CRYPTO_MORPH_PAY" | "QR" | "POS" | "PAY_LINK";
   export type SupportedCurrency = "ETH" | "USDT" | "USDC" | "cUSD" | "DAI" | "USD";
+  export const SupportedCurrencyList = ["USDT", "USDC", "ETH", "cUSD", "DAI", "USD"];

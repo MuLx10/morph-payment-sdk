@@ -1,4 +1,3 @@
-import { PaymentRequest } from '../components/VendorPaymentGateway';
 import { SupportedCurrency } from './constants';
 
 export interface VendorSDKConfig {
@@ -23,6 +22,19 @@ export interface PaymentResult {
   txHash?: string;
   error?: string;
   paymentRequest?: PaymentRequest;
+}
+
+export interface PaymentRequest {
+  id: string;
+  merchantAddress: string;
+  amount: string;
+  currency: SupportedCurrency;
+  description?: string;
+  expiresAt?: Date;
+  status: "pending" | "completed" | "expired" | "cancelled";
+  createdAt: Date;
+  completedAt?: Date;
+  txHash?: string;
 }
 
 export class VendorSDK {

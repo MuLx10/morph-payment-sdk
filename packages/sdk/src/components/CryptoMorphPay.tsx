@@ -112,7 +112,10 @@ const CryptomorphPayComponent: React.FC<CryptomorphPayProps> = ({
         currency: currency === "USD" ? selectedStable : currency,
         timestamp: Date.now(),
       };
-      qr.addData(JSON.stringify(paymentData));
+
+      const encodedData = encodeURIComponent(JSON.stringify(paymentData));
+      const link = `${window.location.origin}/pay?data=${encodedData}`;
+      qr.addData(JSON.stringify({link, ...paymentData}));
       qr.make();
       const qrDataUrl = qr.createDataURL(4);
       setQrCodeDataUrl(qrDataUrl);

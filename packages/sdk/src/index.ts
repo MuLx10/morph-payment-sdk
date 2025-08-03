@@ -9,9 +9,9 @@ export { Button } from './components/ui/button';
 
 // Export payment components
 export { CryptomorphPay } from "./components/CryptoMorphPay";
-export { VendorPaymentGateway } from "./components/VendorPaymentGateway";
+// export { VendorPaymentGateway } from "./components/VendorPaymentGateway";
 export { PaymentLinkHandler } from "./components/PaymentLinkHandler";
-export { SimpleIntegration } from "./components/SimpleIntegration";
+// export { SimpleIntegration } from "./components/SimpleIntegration";
 
 // Export SDK and utilities
 export { 
@@ -24,14 +24,17 @@ export {
 
 // Export types
 export type { 
-  PaymentRequest, 
-} from "./components/VendorPaymentGateway";
-export type { 
   SupportedCurrency, 
-  PaymentMethod 
+  PaymentMethod,
 } from "./lib/constants";
+
+export { 
+  SupportedCurrencyList
+} from "./lib/constants";
+
 export type { 
   VendorSDKConfig, 
   CreatePaymentOptions, 
-  PaymentResult 
+  PaymentResult,
+  PaymentRequest
 } from "./lib/VendorSDK"; 
