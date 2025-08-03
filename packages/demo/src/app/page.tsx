@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { WagmiProvider, createConfig } from "wagmi";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { http } from "viem";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
@@ -33,10 +34,14 @@ const config = createConfig({
   },
 });
 
+// Create a QueryClient instance
+const queryClient = new QueryClient();
+
 export default function Home() {
   return (
-    <WagmiProvider config={config}>
-      <RainbowKitProvider>
+    <QueryClientProvider client={queryClient}>
+      <WagmiProvider config={config}>
+        <RainbowKitProvider>
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
           <Box sx={{ textAlign: 'center' }}>
             <Typography variant="h2" component="h1" sx={{ mb: 4, fontWeight: 'bold' }}>
@@ -58,7 +63,8 @@ export default function Home() {
             </Box>
           </Box>
         </main>
-      </RainbowKitProvider>
-    </WagmiProvider>
+        </RainbowKitProvider>
+      </WagmiProvider>
+    </QueryClientProvider>
   );
 }

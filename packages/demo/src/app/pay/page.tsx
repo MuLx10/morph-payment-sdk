@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { PaymentLinkHandler } from 'morph-stablecoin-sdk';
+import { Box, Container } from '@mui/material';
 
 export default function PayPage() {
   const handlePaymentSuccess = (txHash: string) => {
@@ -15,14 +16,21 @@ export default function PayPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-8">
-      <div className="w-full max-w-md">
+    <Box sx={{ 
+      minHeight: '100vh', 
+      bgcolor: 'grey.50', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      py: 4
+    }}>
+      <Container maxWidth="sm">
         <PaymentLinkHandler
           onPaymentSuccess={handlePaymentSuccess}
           onPaymentError={handlePaymentError}
           theme="light"
         />
-      </div>
-    </div>
+      </Container>
+    </Box>
   );
 } 

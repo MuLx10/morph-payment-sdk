@@ -30,6 +30,26 @@ npm install morph-stablecoin-sdk
 
 ### 2. Basic Integration
 
+#### Using CryptoMorphPay Component (Recommended)
+
+```tsx
+import { CryptomorphPay } from 'morph-stablecoin-sdk';
+
+function App() {
+  return (
+    <CryptomorphPay
+      address="0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6"
+      amount={0.1}
+      currency="ETH"
+      onSuccess={tx => console.log('Payment success:', tx)}
+      onError={err => console.error('Payment error:', err)}
+    />
+  );
+}
+```
+
+#### Using VendorPaymentGateway Component
+
 ```tsx
 import { VendorPaymentGateway } from 'morph-stablecoin-sdk';
 
@@ -131,9 +151,33 @@ Visit `http://localhost:3000` to see the demo in action.
 
 ## SDK Components
 
+### CryptomorphPay (Recommended)
+
+The main component for accepting crypto payments with multiple payment options.
+
+```tsx
+<CryptomorphPay
+  address="0x..." // merchant address
+  amount={0.1} // payment amount
+  currency="ETH" // currency (ETH, USDT, USDC, USD)
+  onSuccess={tx => console.log('Payment success:', tx)}
+  onError={err => console.error('Payment error:', err)}
+  theme="light" // optional: light or dark theme
+  tokenAddress="0x..." // optional: custom token address
+  posEnabled={false} // optional: enable POS mode (disabled by default)
+/>
+```
+
+**Features:**
+- **Wallet Payment**: Direct payment via connected wallet
+- **QR Code**: Generate QR codes for mobile wallet payments
+- **Payment Link**: Create shareable payment links
+- **Multi-Currency**: Support for ETH, USDT, USDC, and USD (with stablecoin selection)
+- **Modern UI**: Clean, responsive interface with Material-UI components
+
 ### VendorPaymentGateway
 
-The main component for accepting crypto payments.
+The legacy component for accepting crypto payments.
 
 ```tsx
 <VendorPaymentGateway
@@ -255,7 +299,65 @@ Currently supports Morpho Holesky testnet. Mainnet support coming soon.
 
 ## Examples
 
-### Basic Integration
+### Basic Integration with CryptoMorphPay
+
+```tsx
+import { CryptomorphPay } from 'morph-stablecoin-sdk';
+
+function MyApp() {
+  return (
+    <CryptomorphPay
+      address="0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6"
+      amount={0.1}
+      currency="ETH"
+      onSuccess={tx => {
+        alert(`Payment successful! TX: ${tx}`);
+      }}
+      onError={err => {
+        alert(`Payment failed: ${err.message}`);
+      }}
+    />
+  );
+}
+```
+
+### Multiple Payment Options
+
+```tsx
+import { CryptomorphPay } from 'morph-stablecoin-sdk';
+
+function PaymentPage() {
+  return (
+    <div>
+      {/* ETH Payment */}
+      <CryptomorphPay
+        address="0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6"
+        amount={0.1}
+        currency="ETH"
+        onSuccess={tx => console.log('ETH payment:', tx)}
+      />
+      
+      {/* USD Payment (with stablecoin selection) */}
+      <CryptomorphPay
+        address="0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6"
+        amount={50}
+        currency="USD"
+        onSuccess={tx => console.log('USD payment:', tx)}
+      />
+      
+      {/* USDT Payment */}
+      <CryptomorphPay
+        address="0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6"
+        amount={100}
+        currency="USDT"
+        onSuccess={tx => console.log('USDT payment:', tx)}
+      />
+    </div>
+  );
+}
+```
+
+### Legacy Integration with VendorPaymentGateway
 
 ```tsx
 import { VendorPaymentGateway } from 'morph-stablecoin-sdk';

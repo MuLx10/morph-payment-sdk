@@ -1,4 +1,5 @@
-import { PaymentRequest, SupportedCurrency } from '../components/VendorPaymentGateway';
+import { PaymentRequest } from '../components/VendorPaymentGateway';
+import { SupportedCurrency } from './constants';
 
 export interface VendorSDKConfig {
   merchantAddress: string;

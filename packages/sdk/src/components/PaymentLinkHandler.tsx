@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useWalletClient } from 'wagmi';
+import { useWalletClient, WagmiProvider, createConfig } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { RainbowKitProvider, ConnectButton } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/styles.css';
 import {
   encodeFunctionData,
   parseUnits,
   parseEther,
-  Abi
+  Abi,
+  http
 } from "viem";
 import { morphHolesky } from "viem/chains";
 import { 
@@ -16,28 +20,9 @@ import {
   Box,
   Chip
 } from '@mui/material';
+import { WalletWrapper } from "./WalletWrapper";
 
-const TOKEN_ADDRESSES = {
-  USDT: "0x07d9b60c7F719994c07C96a7f87460a0cC94379F",
-  USDC: "0xe3B620B1557696DA5324EFcA934Ea6c27ad69e00",
-  cUSD: "0x07d9b60c7F719994c07C96a7f87460a0cC94379F",
-  DAI: "0xe3B620B1557696DA5324EFcA934Ea6c27ad69e00",
-};
-
-const ERC20_ABI: Abi = [
-  {
-    type: 'function',
-    name: 'transfer',
-    stateMutability: 'nonpayable',
-    inputs: [
-      { name: '_to', type: 'address' },
-      { name: '_value', type: 'uint256' }
-    ],
-    outputs: [
-      { name: '', type: 'bool' }
-    ]
-  }
-];
+import { TOKEN_ADDRESSES, ERC20_ABI } from "../lib/constants";
 
 interface PaymentData {
   merchant: string;
@@ -53,7 +38,7 @@ interface PaymentLinkHandlerProps {
   theme?: "light" | "dark";
 }
 
-export const PaymentLinkHandler: React.FC<PaymentLinkHandlerProps> = ({
+const PaymentLinkHandlerComponent: React.FC<PaymentLinkHandlerProps> = ({
   onPaymentSuccess,
   onPaymentError,
   theme = "light"
@@ -90,7 +75,7 @@ export const PaymentLinkHandler: React.FC<PaymentLinkHandlerProps> = ({
 
     try {
       let hash: string;
-      const tokenToUse = paymentData.currency === "USD" ? "USDT" : paymentData.currency;
+      const tokenToUse = paymentData.currency;
 
       if (tokenToUse === "ETH") {
         hash = await walletClient.sendTransaction({
@@ -167,9 +152,14 @@ export const PaymentLinkHandler: React.FC<PaymentLinkHandlerProps> = ({
         <Typography variant="h5" component="h2" sx={{ mb: 1, fontWeight: 'bold' }}>
           Complete Payment
         </Typography>
-        <Typography color="text.secondary">
+        <Typography color="text.secondary" sx={{ mb: 2 }}>
           Pay securely with your crypto wallet
         </Typography>
+        
+        {/* Wallet Connection */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+          <ConnectButton />
+        </Box>
       </Box>
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -240,5 +230,15 @@ export const PaymentLinkHandler: React.FC<PaymentLinkHandlerProps> = ({
         )}
       </Box>
     </Paper>
+  );
+};
+
+
+export const PaymentLinkHandler: React.FC<PaymentLinkHandlerProps> = (props) => {
+  return (
+    <WalletWrapper>
+      <PaymentLinkHandlerComponent {...props} />
+    </WalletWrapper>
+
   );
 }; 

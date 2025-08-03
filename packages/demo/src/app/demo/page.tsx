@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { VendorPaymentGateway } from 'morph-stablecoin-sdk';
+import { CryptomorphPay } from 'morph-stablecoin-sdk';
 import { createVendorSDK, validateMerchantAddress } from 'morph-stablecoin-sdk';
 import { 
   Button, 
@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 
 export default function DemoPage() {
-  const [merchantAddress, setMerchantAddress] = useState('0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6');
+  const [merchantAddress, setMerchantAddress] = useState('0x7312Ee30515CAe8B03EF1dF6B75e0D2dBb71B0E4');
   const [showGateway, setShowGateway] = useState(false);
 
   const handlePaymentSuccess = (payment: any) => {
@@ -82,17 +82,40 @@ export default function DemoPage() {
         </Paper>
 
         {showGateway && isValidAddress && (
-          <Paper elevation={3}>
-            <VendorPaymentGateway
-              merchantAddress={merchantAddress}
-              supportedCurrencies={["USDT", "USDC", "ETH", "cUSD", "DAI"]}
-              onPaymentSuccess={handlePaymentSuccess}
-              onPaymentError={handlePaymentError}
-              theme="light"
-              showQRCode={true}
-              showPOS={true}
-              showPayLink={true}
-            />
+          <Paper elevation={3} sx={{ p: 3 }}>
+            <Typography variant="h4" component="h2" sx={{ mb: 3, fontWeight: 'bold', textAlign: 'center' }}>
+              CryptoMorphPay Component Demo
+            </Typography>
+            
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+              <CryptomorphPay
+                address={merchantAddress}
+                amount={0.1}
+                currency="ETH"
+                onSuccess={tx => console.log('Payment success:', tx)}
+                onError={err => console.error('Payment error:', err)}
+              />
+            </Box>
+            
+            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+              <CryptomorphPay
+                address={merchantAddress}
+                amount={50}
+                currency="USD"
+                onSuccess={tx => console.log('Payment success:', tx)}
+                onError={err => console.error('Payment error:', err)}
+              />
+            </Box>
+            
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CryptomorphPay
+                address={merchantAddress}
+                amount={100}
+                currency="USDT"
+                onSuccess={tx => console.log('Payment success:', tx)}
+                onError={err => console.error('Payment error:', err)}
+              />
+            </Box>
           </Paper>
         )}
 

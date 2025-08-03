@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useWalletClient } from 'wagmi';
+import { useWalletClient, WagmiProvider, createConfig } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { RainbowKitProvider, ConnectButton } from '@rainbow-me/rainbowkit';
+import {  } from 'qrcode-generator'
+import '@rainbow-me/rainbowkit/styles.css';
 import {
   encodeFunctionData,
   parseUnits,
   parseEther,
   Abi,
-  getAddress
+  getAddress,
+  http
 } from "viem";
 import { morphHolesky } from "viem/chains";
-import { QRCodeGenerator } from './QRCodeGenerator';
 import { 
   Button, 
   TextField, 
@@ -21,45 +25,13 @@ import {
   Alert,
   Paper,
   Grid,
-  Chip
+  Chip,
+  Input
 } from '@mui/material';
+import { CryptomorphPay } from "./CryptoMorphPay";
 
-// Token addresses on Morpho Holesky
-const TOKEN_ADDRESSES = {
-  USDT: "0x07d9b60c7F719994c07C96a7f87460a0cC94379F",
-  USDC: "0xe3B620B1557696DA5324EFcA934Ea6c27ad69e00",
-  cUSD: "0x07d9b60c7F719994c07C96a7f87460a0cC94379F", // Using USDT as cUSD for demo
-  DAI: "0xe3B620B1557696DA5324EFcA934Ea6c27ad69e00", // Using USDC as DAI for demo
-};
-
-const ERC20_ABI: Abi = [
-  {
-    type: 'function',
-    name: 'transfer',
-    stateMutability: 'nonpayable',
-    inputs: [
-      { name: '_to', type: 'address' },
-      { name: '_value', type: 'uint256' }
-    ],
-    outputs: [
-      { name: '', type: 'bool' }
-    ]
-  },
-  {
-    type: 'function',
-    name: 'balanceOf',
-    stateMutability: 'view',
-    inputs: [
-      { name: '_owner', type: 'address' }
-    ],
-    outputs: [
-      { name: '', type: 'uint256' }
-    ]
-  }
-];
-
-export type PaymentMethod = "QR" | "POS" | "PAY_LINK";
-export type SupportedCurrency = "ETH" | "USDT" | "USDC" | "cUSD" | "DAI" | "USD";
+import { TOKEN_ADDRESSES, SupportedCurrency, PaymentMethod, ERC20_ABI } from "../lib/constants";
+import { WalletWrapper } from "./WalletWrapper";
 
 export interface PaymentRequest {
   id: string;
@@ -81,24 +53,26 @@ export interface VendorPaymentGatewayProps {
   onPaymentError?: (error: any) => void;
   theme?: "light" | "dark";
   mode?: "standalone" | "embedded";
+  showCryptoMorphPay?: boolean;
   showQRCode?: boolean;
   showPOS?: boolean;
   showPayLink?: boolean;
 }
 
-export const VendorPaymentGateway: React.FC<VendorPaymentGatewayProps> = ({
+const VendorPaymentGatewayComponent: React.FC<VendorPaymentGatewayProps> = ({
   merchantAddress,
-  supportedCurrencies = ["USDT", "USDC", "ETH"],
+  supportedCurrencies = ["USDT", "USDC", "ETH", "cUSD", "DAI", "USD"],
   onPaymentSuccess,
   onPaymentError,
   theme = "light",
   mode = "standalone",
+  showCryptoMorphPay = true,
   showQRCode = true,
-  showPOS = true,
+  showPOS = false,
   showPayLink = true,
 }) => {
   const { data: walletClient } = useWalletClient();
-  const [activeTab, setActiveTab] = useState<PaymentMethod>("QR");
+  const [activeTab, setActiveTab] = useState<PaymentMethod>("CRYPTO_MORPH_PAY");
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState<SupportedCurrency>("USDT");
   const [description, setDescription] = useState("");
@@ -220,10 +194,44 @@ export const VendorPaymentGateway: React.FC<VendorPaymentGatewayProps> = ({
   // QR Code Component
   const QRCodeDisplay = ({ data }: { data: string }) => (
     <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg">
-      <QRCodeGenerator data={data} size={256} />
-      <div className="mt-4 text-xs text-gray-600 break-all max-w-64 text-center">
-        {data}
-      </div>
+      <Box sx={{ display: 'flex', gap: 2 }}>
+        <Input
+          value={amount}
+          type="decimal"
+          onChange={(e) => setAmount(e.target.value)}
+          placeholder="0.00"
+          fullWidth
+          size="medium"
+          sx={{ fontSize: '1.25rem', fontWeight: 'bold' }}
+        />
+        <FormControl fullWidth>
+          <InputLabel>Currency</InputLabel>
+          <Select
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value as SupportedCurrency)}
+            label="Currency"
+          >
+            {supportedCurrencies.map(c => (
+              <MenuItem key={c} value={c}>{c}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+      <TextField
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Payment description (optional)"
+        fullWidth
+      />
+      <Button
+        onClick={createPaymentRequest}
+        variant="contained"
+        color="success"
+        size="large"
+        fullWidth
+      >
+        Create Payment Request
+      </Button>
     </div>
   );
 
@@ -375,13 +383,22 @@ export const VendorPaymentGateway: React.FC<VendorPaymentGatewayProps> = ({
         <Typography variant="h4" component="h2" sx={{ mb: 1, fontWeight: 'bold' }}>
           Crypto Payment Gateway
         </Typography>
-        <Typography variant="body1" color="text.secondary">
+        <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
           Accept crypto payments via QR codes, POS, or payment links
         </Typography>
       </Box>
 
       {/* Tab Navigation */}
       <Box sx={{ display: 'flex', gap: 1, mb: 3 }}>
+        {showCryptoMorphPay && (
+          <Button
+            onClick={() => setActiveTab("CRYPTO_MORPH_PAY")}
+            variant={activeTab === "CRYPTO_MORPH_PAY" ? "contained" : "outlined"}
+            color="success"
+          >
+            Pay with Cryptomorph
+          </Button>
+        )}
         {showQRCode && (
           <Button
             onClick={() => setActiveTab("QR")}
@@ -420,6 +437,41 @@ export const VendorPaymentGateway: React.FC<VendorPaymentGatewayProps> = ({
 
       {/* Tab Content */}
       <Box sx={{ minHeight: '400px' }}>
+        {activeTab === "CRYPTO_MORPH_PAY" && (
+          <>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+        <Input
+          value={amount}
+          type="decimal"
+          onChange={(e) => setAmount(e.target.value)}
+          placeholder="0.00"
+          fullWidth
+          size="medium"
+          sx={{ fontSize: '1.25rem', fontWeight: 'bold' }}
+        />
+        <FormControl fullWidth>
+          <InputLabel>Currency</InputLabel>
+          <Select
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value as SupportedCurrency)}
+            label="Currency"
+          >
+            {supportedCurrencies.map(c => (
+              <MenuItem key={c} value={c}>{c}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+  
+          <CryptomorphPay
+          address={merchantAddress}
+          amount={amount}
+          currency={currency}
+          onSuccess={tx => console.log('Payment success:', tx)}
+          onError={err => console.error('Payment error:', err)}
+        />
+                </>
+        )}
         {activeTab === "QR" && (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Alert severity="info">
@@ -431,22 +483,7 @@ export const VendorPaymentGateway: React.FC<VendorPaymentGatewayProps> = ({
               </Typography>
             </Alert>
             
-            {qrCodeData ? (
-              <QRCodeDisplay data={qrCodeData} />
-            ) : (
-              <Box sx={{ textAlign: 'center', py: 4, color: 'text.secondary' }}>
-                Create a payment request to generate QR code
-              </Box>
-            )}
-            
-            <Button
-              onClick={() => setActiveTab("POS")}
-              variant="contained"
-              color="success"
-              fullWidth
-            >
-              Create Payment Request
-            </Button>
+            <QRCodeDisplay data={qrCodeData} />
           </Box>
         )}
 
@@ -507,4 +544,12 @@ export const VendorPaymentGateway: React.FC<VendorPaymentGatewayProps> = ({
       )}
     </Paper>
   );
-}; 
+};
+
+export function VendorPaymentGateway(props: VendorPaymentGatewayProps) {
+  return (
+    <WalletWrapper>
+      <VendorPaymentGatewayComponent {...props} />
+    </WalletWrapper>
+  );
+}
