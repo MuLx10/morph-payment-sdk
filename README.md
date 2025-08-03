@@ -1,5 +1,5 @@
 
-# Morpho Crypto Payment Gateway SDK
+# Morph Crypto Payment Gateway SDK
 
 A plug-and-play SDK for vendors to accept crypto payments (USDT, cUSD, ETH, etc.) via QR codes, POS terminals, or payment links—with stablecoin settlement on the Morpho network.
 
