@@ -198,11 +198,10 @@ const CryptomorphPayComponent: React.FC<CryptomorphPayProps> = ({
       <Button
         variant="contained"
         size="large"
-        color="success"
         onClick={() => setOpen(true)}
         sx={{
-          background: 'linear-gradient(45deg, #4CAF50, #45a049)',
-          color: 'white',
+          background: '#14A800',
+          color: '#white',
           px: 4,
           py: 1.5,
           fontSize: '1.125rem',
@@ -210,19 +209,37 @@ const CryptomorphPayComponent: React.FC<CryptomorphPayProps> = ({
           letterSpacing: 1,
           mb: 2,
           '&:hover': {
-            background: 'linear-gradient(45deg, #45a049, #7cb342, #45a049)',
+            background: 'linear-gradient(45deg, #14A800, #7cb342, #14A800)',
+            color: 'white'
           }
         }}
         startIcon={
           <Box
-            component="svg"
-            width={24}
-            height={24}
-            viewBox="0 0 24 24"
-            sx={{ fill: 'none' }}
+            component="span"
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 24,
+              height: 24,
+              mr: 1,
+            }}
           >
-            <circle cx="12" cy="12" r="10" fill="#45a049" />
-            <text x="12" y="16" textAnchor="middle" fontSize="12" fill="#fff">M</text>
+            <svg 
+              viewBox="0 0 32 32" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg" 
+              width={24} 
+              height={24} 
+              style={{ display: 'block' }}
+            >
+              <path 
+                fillRule="evenodd" 
+                clipRule="evenodd" 
+                d="M0 32H11.0193V15.4745C11.0193 14.9403 11.7875 14.8576 11.9012 15.3795L14.5011 27.3126H21.1127V23.2057C21.1127 22.9593 21.3124 22.7596 21.5588 22.7596H32V0H20.9807V4.1069C20.9807 4.35327 20.781 4.55299 20.5346 4.55299H9.54244L10.4458 8.69935C10.5064 8.97745 10.2946 9.2404 10.01 9.2404H0V32Z" 
+                fill="#14A800"
+              />
+            </svg>
           </Box>
         }
       >
