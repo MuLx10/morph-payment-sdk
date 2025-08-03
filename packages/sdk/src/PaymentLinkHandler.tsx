@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import { WalletWrapper } from "./WalletWrapper";
 
-import { TOKEN_ADDRESSES, ERC20_ABI } from "../lib/constants";
+import { TOKEN_ADDRESSES, ERC20_ABI } from "./lib/constants";
 
 interface PaymentData {
   merchant: string;

@@ -36,7 +36,7 @@ import {
   AccountBalanceWallet as WalletIcon,
   Close as CloseIcon,
 } from '@mui/icons-material';
-import { SupportedCurrency, TOKEN_ADDRESSES, ERC20_ABI } from "../lib/constants";
+import { SupportedCurrency, TOKEN_ADDRESSES, ERC20_ABI } from "./lib/constants";
 import { WalletWrapper } from "./WalletWrapper";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 

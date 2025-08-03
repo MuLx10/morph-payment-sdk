@@ -204,7 +204,8 @@ export default function DemoPage() {
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>2. Import and Configure</Typography>
               <Paper sx={{ p: 1, mt: 1, bgcolor: 'grey.100' }}>
                 <Typography variant="body2" component="code">
-                  {`import { VendorPaymentGateway, createVendorSDK } from 'morph-stablecoin-sdk';
+                  {`import { CryptomorphPay } from 'morph-stablecoin-sdk';
+
 
 const sdk = createVendorSDK({
   merchantAddress: '0x...',
@@ -217,11 +218,13 @@ const sdk = createVendorSDK({
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>3. Use the Component</Typography>
               <Paper sx={{ p: 1, mt: 1, bgcolor: 'grey.100' }}>
                 <Typography variant="body2" component="code">
-                  {`<VendorPaymentGateway
-  merchantAddress="0x..."
-  onPaymentSuccess={handleSuccess}
-  onPaymentError={handleError}
-/>`}
+                  {`<CryptomorphPay
+      address="0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6"
+      amount={0.1}
+      currency="ETH"
+      onSuccess={tx => console.log('Payment success:', tx)}
+      onError={err => console.error('Payment error:', err)}
+    />`}
                 </Typography>
               </Paper>
             </Box>

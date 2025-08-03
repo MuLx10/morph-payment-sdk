@@ -48,30 +48,6 @@ function App() {
 }
 ```
 
-#### Using VendorPaymentGateway Component
-
-```tsx
-import { VendorPaymentGateway } from 'morph-stablecoin-sdk';
-
-function App() {
-  const handlePaymentSuccess = (payment) => {
-    console.log('Payment successful:', payment);
-  };
-
-  const handlePaymentError = (error) => {
-    console.error('Payment error:', error);
-  };
-
-  return (
-    <VendorPaymentGateway
-      merchantAddress="0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6"
-      supportedCurrencies={["USDT", "USDC", "ETH"]}
-      onPaymentSuccess={handlePaymentSuccess}
-      onPaymentError={handlePaymentError}
-    />
-  );
-}
-```
 
 ### 3. SDK Integration
 
@@ -175,23 +151,6 @@ The main component for accepting crypto payments with multiple payment options.
 - **Multi-Currency**: Support for ETH, USDT, USDC, and USD (with stablecoin selection)
 - **Modern UI**: Clean, responsive interface with Material-UI components
 
-### VendorPaymentGateway
-
-The legacy component for accepting crypto payments.
-
-```tsx
-<VendorPaymentGateway
-  merchantAddress="0x..."
-  supportedCurrencies={["USDT", "USDC", "ETH"]}
-  onPaymentSuccess={(payment) => console.log(payment)}
-  onPaymentError={(error) => console.error(error)}
-  theme="light"
-  mode="standalone"
-  showQRCode={true}
-  showPOS={true}
-  showPayLink={true}
-/>
-```
 
 ### PaymentLinkHandler
 
@@ -352,62 +311,6 @@ function PaymentPage() {
         currency="USDT"
         onSuccess={tx => console.log('USDT payment:', tx)}
       />
-    </div>
-  );
-}
-```
-
-### Legacy Integration with VendorPaymentGateway
-
-```tsx
-import { VendorPaymentGateway } from 'morph-stablecoin-sdk';
-
-function MyApp() {
-  return (
-    <VendorPaymentGateway
-      merchantAddress="0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6"
-      onPaymentSuccess={(payment) => {
-        alert(`Payment successful! TX: ${payment.txHash}`);
-      }}
-    />
-  );
-}
-```
-
-### Advanced Integration
-
-```tsx
-import { createVendorSDK, VendorPaymentGateway } from 'morph-stablecoin-sdk';
-
-const sdk = createVendorSDK({
-  merchantAddress: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
-  supportedCurrencies: ['USDT', 'USDC', 'ETH'],
-  theme: 'dark'
-});
-
-function AdvancedApp() {
-  const [paymentRequests, setPaymentRequests] = useState([]);
-
-  useEffect(() => {
-    setPaymentRequests(sdk.getPaymentRequests());
-  }, []);
-
-  return (
-    <div>
-      <VendorPaymentGateway
-        merchantAddress="0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6"
-        onPaymentSuccess={(payment) => {
-          sdk.updatePaymentStatus(payment.id, 'completed', payment.txHash);
-          setPaymentRequests(sdk.getPaymentRequests());
-        }}
-        theme="dark"
-        mode="embedded"
-      />
-      
-      <div>
-        <h3>Payment Statistics</h3>
-        <pre>{JSON.stringify(sdk.getPaymentStats(), null, 2)}</pre>
-      </div>
     </div>
   );
 }
